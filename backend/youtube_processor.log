@@ -1,0 +1,278 @@
+2025-07-08 12:00:22,970 - main - INFO - Successfully initialized video processor
+2025-07-08 12:17:06,097 - main - INFO - Successfully initialized video processor
+2025-07-08 12:17:15,622 - main - INFO - Successfully initialized video processor
+2025-07-08 12:19:01,847 - main - INFO - Successfully initialized video processor
+2025-07-08 12:29:24,641 - main - INFO - Successfully initialized video processor
+2025-07-08 12:29:30,062 - main - INFO - Successfully initialized video processor
+2025-07-08 12:31:07,413 - main - INFO - Successfully initialized video processor
+2025-07-08 12:32:10,931 - main - INFO - Processing video: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+2025-07-08 12:32:10,934 - video_processor - INFO - Created temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_fusubkx1
+2025-07-08 12:32:10,934 - video_processor - INFO - Attempting download strategy 1/7: _strategy_best_quality
+2025-07-08 12:32:32,485 - video_processor - INFO - Successfully downloaded: C:\Users\vm\AppData\Local\Temp\youtube_processor_fusubkx1\Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster).mp4
+2025-07-08 12:32:32,485 - video_processor - INFO - Successfully downloaded using strategy: _strategy_best_quality
+2025-07-08 12:32:32,485 - video_processor - WARNING - Could not probe input file: , proceeding anyway
+2025-07-08 12:32:32,486 - video_processor - INFO - Running ffmpeg command: ffmpeg -i C:\Users\vm\AppData\Local\Temp\youtube_processor_fusubkx1\Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster).mp4 -vf scale=trunc(oh*a/2)*2:720 -c:v libx265 -crf 28 -preset medium -c:a aac -b:a 96k -movflags +faststart -avoid_negative_ts make_zero -y C:\Users\vm\AppData\Local\Temp\youtube_processor_fusubkx1\output_hevc_720p.mp4
+2025-07-08 12:32:32,486 - video_processor - ERROR - Error processing video: 
+2025-07-08 12:32:33,505 - video_processor - INFO - Cleaned up temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_fusubkx1
+2025-07-08 12:32:35,551 - main - INFO - Processing video: https://youtu.be/dQw4w9WgXcQ
+2025-07-08 12:32:35,552 - video_processor - INFO - Created temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_ftg2w2dx
+2025-07-08 12:32:35,552 - video_processor - INFO - Attempting download strategy 1/7: _strategy_best_quality
+2025-07-08 12:32:54,898 - video_processor - INFO - Successfully downloaded: C:\Users\vm\AppData\Local\Temp\youtube_processor_ftg2w2dx\Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster).mp4
+2025-07-08 12:32:54,899 - video_processor - INFO - Successfully downloaded using strategy: _strategy_best_quality
+2025-07-08 12:32:54,899 - video_processor - WARNING - Could not probe input file: , proceeding anyway
+2025-07-08 12:32:54,899 - video_processor - INFO - Running ffmpeg command: ffmpeg -i C:\Users\vm\AppData\Local\Temp\youtube_processor_ftg2w2dx\Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster).mp4 -vf scale=trunc(oh*a/2)*2:720 -c:v libx265 -crf 28 -preset medium -c:a aac -b:a 96k -movflags +faststart -avoid_negative_ts make_zero -y C:\Users\vm\AppData\Local\Temp\youtube_processor_ftg2w2dx\output_hevc_720p.mp4
+2025-07-08 12:32:54,900 - video_processor - ERROR - Error processing video: 
+2025-07-08 12:32:55,913 - video_processor - INFO - Cleaned up temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_ftg2w2dx
+2025-07-08 12:32:57,949 - main - INFO - Processing video: https://www.youtube.com/watch?v=XALBGkjkUPQ
+2025-07-08 12:32:57,950 - video_processor - INFO - Created temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor__y28cb58
+2025-07-08 12:32:57,950 - video_processor - INFO - Attempting download strategy 1/7: _strategy_best_quality
+2025-07-08 12:33:09,812 - video_processor - INFO - Successfully downloaded: C:\Users\vm\AppData\Local\Temp\youtube_processor__y28cb58\Imagine for 1 Minute.mp4
+2025-07-08 12:33:09,812 - video_processor - INFO - Successfully downloaded using strategy: _strategy_best_quality
+2025-07-08 12:33:09,812 - video_processor - WARNING - Could not probe input file: , proceeding anyway
+2025-07-08 12:33:09,813 - video_processor - INFO - Running ffmpeg command: ffmpeg -i C:\Users\vm\AppData\Local\Temp\youtube_processor__y28cb58\Imagine for 1 Minute.mp4 -vf scale=trunc(oh*a/2)*2:720 -c:v libx265 -crf 28 -preset medium -c:a aac -b:a 96k -movflags +faststart -avoid_negative_ts make_zero -y C:\Users\vm\AppData\Local\Temp\youtube_processor__y28cb58\output_hevc_720p.mp4
+2025-07-08 12:33:09,813 - video_processor - ERROR - Error processing video: 
+2025-07-08 12:33:10,818 - video_processor - INFO - Cleaned up temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor__y28cb58
+2025-07-08 12:36:36,099 - main - INFO - Successfully initialized video processor
+2025-07-08 12:39:10,493 - main - INFO - Processing video: https://www.youtube.com/watch?v=orbkg5JH9C8
+2025-07-08 12:39:10,496 - video_processor - INFO - Created temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_27v_8jxj
+2025-07-08 12:39:10,497 - video_processor - INFO - Attempting download strategy 1/7: _strategy_best_quality
+2025-07-08 12:39:23,865 - video_processor - INFO - Successfully downloaded: C:\Users\vm\AppData\Local\Temp\youtube_processor_27v_8jxj\Kandima Signature Video - 20 seconds.mp4
+2025-07-08 12:39:23,866 - video_processor - INFO - Successfully downloaded using strategy: _strategy_best_quality
+2025-07-08 12:39:23,867 - video_processor - WARNING - Could not probe input file: , proceeding anyway
+2025-07-08 12:39:23,868 - video_processor - INFO - Running ffmpeg command: ffmpeg -i C:\Users\vm\AppData\Local\Temp\youtube_processor_27v_8jxj\Kandima Signature Video - 20 seconds.mp4 -vf scale=trunc(oh*a/2)*2:720 -c:v libx265 -crf 28 -preset medium -c:a aac -b:a 96k -movflags +faststart -avoid_negative_ts make_zero -y C:\Users\vm\AppData\Local\Temp\youtube_processor_27v_8jxj\output_hevc_720p.mp4
+2025-07-08 12:39:23,869 - video_processor - ERROR - Error processing video: 
+2025-07-08 12:39:24,876 - video_processor - INFO - Cleaned up temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_27v_8jxj
+2025-07-08 12:43:07,653 - main - INFO - Successfully initialized video processor
+2025-07-08 12:43:22,946 - main - INFO - Successfully initialized video processor
+2025-07-08 12:43:27,291 - main - INFO - Successfully initialized video processor
+2025-07-08 13:02:16,082 - main - INFO - Successfully initialized video processor
+2025-07-08 13:02:25,043 - main - INFO - Processing video: https://www.youtube.com/watch?v=orbkg5JH9C8
+2025-07-08 13:02:25,047 - video_processor - INFO - Created temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_v99iwc_a
+2025-07-08 13:02:25,047 - video_processor - INFO - Attempting download strategy 1/7: _strategy_best_quality
+2025-07-08 13:02:31,064 - video_processor - INFO - Successfully downloaded: C:\Users\vm\AppData\Local\Temp\youtube_processor_v99iwc_a\Kandima Signature Video - 20 seconds.mp4
+2025-07-08 13:02:31,065 - video_processor - INFO - Successfully downloaded using strategy: _strategy_best_quality
+2025-07-08 13:02:31,065 - video_processor - WARNING - Could not probe input file: , proceeding anyway
+2025-07-08 13:02:31,066 - video_processor - INFO - Running ffmpeg command: ffmpeg -i C:\Users\vm\AppData\Local\Temp\youtube_processor_v99iwc_a\Kandima Signature Video - 20 seconds.mp4 -c:v libx265 -crf 28 -preset medium -vf scale=-2:720 -c:a aac -b:a 96k -movflags +faststart -avoid_negative_ts make_zero -loglevel error -y C:\Users\vm\AppData\Local\Temp\youtube_processor_v99iwc_a\output_hevc_720p.mp4
+2025-07-08 13:02:31,067 - video_processor - ERROR - Failed to start FFmpeg process: 
+2025-07-08 13:02:32,071 - video_processor - INFO - Cleaned up temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_v99iwc_a
+2025-07-08 13:04:21,137 - main - INFO - Successfully initialized video processor
+2025-07-08 13:04:23,484 - main - INFO - Successfully initialized video processor
+2025-07-08 13:04:46,547 - main - INFO - Successfully initialized video processor
+2025-07-08 13:05:17,863 - main - INFO - Successfully initialized video processor
+2025-07-08 13:05:38,746 - main - INFO - Successfully initialized video processor
+2025-07-08 13:05:49,824 - main - INFO - Successfully initialized video processor
+2025-07-08 13:05:55,246 - main - INFO - Successfully initialized video processor
+2025-07-08 13:07:24,297 - main - INFO - Successfully initialized video processor
+2025-07-08 13:07:43,215 - main - INFO - Successfully initialized video processor
+2025-07-08 13:08:18,896 - main - INFO - Successfully initialized video processor
+2025-07-08 13:08:52,547 - main - INFO - Processing video: https://www.youtube.com/watch?v=orbkg5JH9C8
+2025-07-08 13:08:52,549 - video_processor - INFO - Created temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_cu_pwhd4
+2025-07-08 13:08:52,549 - video_processor - INFO - Attempting download strategy 1/7: _strategy_best_quality
+2025-07-08 13:08:57,442 - video_processor - INFO - Successfully downloaded: C:\Users\vm\AppData\Local\Temp\youtube_processor_cu_pwhd4\Kandima Signature Video - 20 seconds.mp4
+2025-07-08 13:08:57,443 - video_processor - INFO - Successfully downloaded using strategy: _strategy_best_quality
+2025-07-08 13:08:57,443 - video_processor - WARNING - Could not probe input file: , proceeding anyway
+2025-07-08 13:08:57,444 - video_processor - INFO - Running ffmpeg command: ffmpeg -i C:\Users\vm\AppData\Local\Temp\youtube_processor_cu_pwhd4\Kandima Signature Video - 20 seconds.mp4 -c:v libx265 -crf 28 -preset medium -vf scale=-2:720 -c:a aac -b:a 96k -movflags +faststart -avoid_negative_ts make_zero -loglevel error -y C:\Users\vm\AppData\Local\Temp\youtube_processor_cu_pwhd4\output_hevc_720p.mp4
+2025-07-08 13:08:57,444 - video_processor - ERROR - Error processing video: name 'shutil' is not defined
+Traceback (most recent call last):
+  File "C:\Users\vm\Downloads\project-bolt-sb1-camkaytw\project\backend\video_processor.py", line 526, in process_with_ffmpeg
+    ffmpeg_path = shutil.which("ffmpeg")
+                  ^^^^^^
+NameError: name 'shutil' is not defined. Did you forget to import 'shutil'?
+2025-07-08 13:08:58,458 - video_processor - INFO - Cleaned up temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_cu_pwhd4
+2025-07-08 13:10:41,369 - main - INFO - Successfully initialized video processor
+2025-07-08 13:10:44,332 - main - INFO - Successfully initialized video processor
+2025-07-08 13:10:53,810 - main - INFO - Successfully initialized video processor
+2025-07-08 13:11:04,937 - main - INFO - Processing video: https://www.youtube.com/watch?v=orbkg5JH9C8
+2025-07-08 13:11:04,941 - video_processor - INFO - Created temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_nkpd57ym
+2025-07-08 13:11:04,942 - video_processor - INFO - Attempting download strategy 1/7: _strategy_best_quality
+2025-07-08 13:11:10,293 - video_processor - INFO - Successfully downloaded: C:\Users\vm\AppData\Local\Temp\youtube_processor_nkpd57ym\Kandima Signature Video - 20 seconds.mp4
+2025-07-08 13:11:10,294 - video_processor - INFO - Successfully downloaded using strategy: _strategy_best_quality
+2025-07-08 13:11:10,294 - video_processor - WARNING - Could not probe input file: , proceeding anyway
+2025-07-08 13:11:10,295 - video_processor - INFO - Running ffmpeg command: ffmpeg -i C:\Users\vm\AppData\Local\Temp\youtube_processor_nkpd57ym\Kandima Signature Video - 20 seconds.mp4 -c:v libx265 -crf 28 -preset medium -vf scale=-2:720 -c:a aac -b:a 96k -movflags +faststart -avoid_negative_ts make_zero -loglevel error -y C:\Users\vm\AppData\Local\Temp\youtube_processor_nkpd57ym\output_hevc_720p.mp4
+2025-07-08 13:11:10,298 - video_processor - INFO - Using absolute FFmpeg path: C:\ffmpeg\bin\ffmpeg.EXE
+2025-07-08 13:11:10,298 - video_processor - INFO - Path with spaces detected: C:\Users\vm\AppData\Local\Temp\youtube_processor_nkpd57ym\Kandima Signature Video - 20 seconds.mp4
+2025-07-08 13:11:10,300 - video_processor - INFO - Windows shell command: C:\ffmpeg\bin\ffmpeg.EXE -i "C:\Users\vm\AppData\Local\Temp\youtube_processor_nkpd57ym\Kandima Signature Video - 20 seconds.mp4" -c:v libx265 -crf 28 -preset medium -vf scale=-2:720 -c:a aac -b:a 96k -movflags +faststart -avoid_negative_ts make_zero -loglevel error -y C:\Users\vm\AppData\Local\Temp\youtube_processor_nkpd57ym\output_hevc_720p.mp4
+2025-07-08 13:11:10,302 - video_processor - ERROR - Failed to start FFmpeg process: 
+Traceback (most recent call last):
+  File "C:\Users\vm\Downloads\project-bolt-sb1-camkaytw\project\backend\video_processor.py", line 559, in process_with_ffmpeg
+    process = await asyncio.create_subprocess_shell(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\vm\AppData\Local\Programs\Python\Python313\Lib\asyncio\subprocess.py", line 211, in create_subprocess_shell
+    transport, protocol = await loop.subprocess_shell(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        stderr=stderr, **kwds)
+        ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vm\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 1761, in subprocess_shell
+    transport = await self._make_subprocess_transport(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        protocol, cmd, True, stdin, stdout, stderr, bufsize, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vm\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 539, in _make_subprocess_transport
+    raise NotImplementedError
+NotImplementedError
+2025-07-08 13:11:11,318 - video_processor - INFO - Cleaned up temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_nkpd57ym
+2025-07-08 13:12:53,423 - main - INFO - Successfully initialized video processor
+2025-07-08 13:12:55,307 - main - INFO - Successfully initialized video processor
+2025-07-08 13:13:07,906 - main - INFO - Successfully initialized video processor
+2025-07-08 13:13:11,393 - main - INFO - Processing video: https://www.youtube.com/watch?v=orbkg5JH9C8
+2025-07-08 13:13:11,395 - video_processor - INFO - Created temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_5ey3wnth
+2025-07-08 13:13:11,396 - video_processor - INFO - Attempting download strategy 1/7: _strategy_best_quality
+2025-07-08 13:13:17,128 - video_processor - INFO - Successfully downloaded: C:\Users\vm\AppData\Local\Temp\youtube_processor_5ey3wnth\Kandima Signature Video - 20 seconds.mp4
+2025-07-08 13:13:17,128 - video_processor - INFO - Successfully downloaded using strategy: _strategy_best_quality
+2025-07-08 13:13:17,129 - video_processor - WARNING - Could not probe input file: , proceeding anyway
+2025-07-08 13:13:17,129 - video_processor - INFO - Running ffmpeg command: ffmpeg -i C:\Users\vm\AppData\Local\Temp\youtube_processor_5ey3wnth\Kandima Signature Video - 20 seconds.mp4 -c:v libx265 -crf 28 -preset medium -vf scale=-2:720 -c:a aac -b:a 96k -movflags +faststart -avoid_negative_ts make_zero -loglevel error -y C:\Users\vm\AppData\Local\Temp\youtube_processor_5ey3wnth\output_hevc_720p.mp4
+2025-07-08 13:13:17,131 - video_processor - INFO - Using absolute FFmpeg path: C:\ffmpeg\bin\ffmpeg.EXE
+2025-07-08 13:13:17,132 - video_processor - INFO - Path with spaces detected: C:\Users\vm\AppData\Local\Temp\youtube_processor_5ey3wnth\Kandima Signature Video - 20 seconds.mp4
+2025-07-08 13:13:17,133 - video_processor - INFO - Windows command list: ['C:\\ffmpeg\\bin\\ffmpeg.EXE', '-i', 'C:\\Users\\vm\\AppData\\Local\\Temp\\youtube_processor_5ey3wnth\\Kandima Signature Video - 20 seconds.mp4', '-c:v', 'libx265', '-crf', '28', '-preset', 'medium', '-vf', 'scale=-2:720', '-c:a', 'aac', '-b:a', '96k', '-movflags', '+faststart', '-avoid_negative_ts', 'make_zero', '-loglevel', 'error', '-y', 'C:\\Users\\vm\\AppData\\Local\\Temp\\youtube_processor_5ey3wnth\\output_hevc_720p.mp4']
+2025-07-08 13:13:17,134 - video_processor - ERROR - Failed to start FFmpeg process: 
+Traceback (most recent call last):
+  File "C:\Users\vm\Downloads\project-bolt-sb1-camkaytw\project\backend\video_processor.py", line 559, in process_with_ffmpeg
+    process = await asyncio.create_subprocess_exec(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+    )
+    ^
+  File "C:\Users\vm\AppData\Local\Programs\Python\Python313\Lib\asyncio\subprocess.py", line 224, in create_subprocess_exec
+    transport, protocol = await loop.subprocess_exec(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        stderr=stderr, **kwds)
+        ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vm\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 1794, in subprocess_exec
+    transport = await self._make_subprocess_transport(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        protocol, popen_args, False, stdin, stdout, stderr,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        bufsize, **kwargs)
+        ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vm\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 539, in _make_subprocess_transport
+    raise NotImplementedError
+NotImplementedError
+2025-07-08 13:13:18,155 - video_processor - INFO - Cleaned up temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_5ey3wnth
+2025-07-08 13:15:10,970 - main - INFO - Successfully initialized video processor
+2025-07-08 13:15:15,319 - main - INFO - Successfully initialized video processor
+2025-07-08 13:15:27,302 - main - INFO - Successfully initialized video processor
+2025-07-08 13:15:30,106 - main - INFO - Processing video: https://www.youtube.com/watch?v=orbkg5JH9C8
+2025-07-08 13:15:30,110 - video_processor - INFO - Created temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_s12m6y_0
+2025-07-08 13:15:30,111 - video_processor - INFO - Attempting download strategy 1/7: _strategy_best_quality
+2025-07-08 13:15:36,588 - video_processor - INFO - Successfully downloaded: C:\Users\vm\AppData\Local\Temp\youtube_processor_s12m6y_0\Kandima Signature Video - 20 seconds.mp4
+2025-07-08 13:15:36,589 - video_processor - INFO - Successfully downloaded using strategy: _strategy_best_quality
+2025-07-08 13:15:36,589 - video_processor - WARNING - Could not probe input file: , proceeding anyway
+2025-07-08 13:15:36,590 - video_processor - INFO - Running ffmpeg command: ffmpeg -i C:\Users\vm\AppData\Local\Temp\youtube_processor_s12m6y_0\Kandima Signature Video - 20 seconds.mp4 -c:v libx265 -crf 28 -preset medium -vf scale=-2:720 -c:a aac -b:a 96k -movflags +faststart -avoid_negative_ts make_zero -loglevel error -y C:\Users\vm\AppData\Local\Temp\youtube_processor_s12m6y_0\output_hevc_720p.mp4
+2025-07-08 13:15:36,593 - video_processor - INFO - Using absolute FFmpeg path: C:\ffmpeg\bin\ffmpeg.EXE
+2025-07-08 13:15:36,593 - video_processor - INFO - Path with spaces detected: C:\Users\vm\AppData\Local\Temp\youtube_processor_s12m6y_0\Kandima Signature Video - 20 seconds.mp4
+2025-07-08 13:15:36,594 - video_processor - INFO - Windows command list: ['C:\\ffmpeg\\bin\\ffmpeg.EXE', '-i', 'C:\\Users\\vm\\AppData\\Local\\Temp\\youtube_processor_s12m6y_0\\Kandima Signature Video - 20 seconds.mp4', '-c:v', 'libx265', '-crf', '28', '-preset', 'medium', '-vf', 'scale=-2:720', '-c:a', 'aac', '-b:a', '96k', '-movflags', '+faststart', '-avoid_negative_ts', 'make_zero', '-loglevel', 'error', '-y', 'C:\\Users\\vm\\AppData\\Local\\Temp\\youtube_processor_s12m6y_0\\output_hevc_720p.mp4']
+2025-07-08 13:15:53,094 - video_processor - INFO - FFmpeg completed with return code: 0
+2025-07-08 13:15:53,095 - video_processor - INFO - FFmpeg stderr output: x265 [info]: HEVC encoder version 4.1+188-cd4f0d6e9
+x265 [info]: build info [Windows][GCC 15.1.0][64 bit] 8bit+10bit+12bit
+x265 [info]: using cpu capabilities: MMX2 SSE2Fast LZCNT SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+x265 [info]: Main profile, Level-3.1 (Main tier)
+x265 [info]: Thread pool created using 8 threads
+x265 [info]: Slices                              : 1
+x265 [info]: frame threads / pool features       : 3 / wpp(12 rows)
+x265 [info]: Coding QT: max CU size, min CU size : 64 / 8
+x265 [info]: Residual QT: max TU size, max depth : 32 / 1 inter / 1 intra
+x265 [info]: ME / range / subpel / merge         : hex / 57 / 2 / 3
+x265 [info]: Keyframe min / max / scenecut / bias  : 25 / 250 / 40 / 5.00 
+x265 [info]: Lookahead / bframes / badapt        : 20 / 4 / 2
+x265 [info]: b-pyramid / weightp / weightb       : 1 / 1 / 0
+x265 [info]: References / ref-limit  cu / depth  : 3 / off / on
+x265 [info]: AQ: mode / str / qg-size / cu-tree  : 2 / 1.0 / 32 / 1
+x265 [info]: Rate Control / qCompress            : CRF-28.0 / 0.60
+x265 [info]: tools: rd=3 psy-rd=2.00 early-skip rskip mode=1 signhide tmvp
+x265 [info]: tools: b-intra strong-intra-smoothing lslices=4 deblock sao
+x265 [info]: tools: dhdr10-info
+x265 [info]: frame I:     18, Avg QP:25.78  kb/s: 5723.08 
+x265 [info]: frame P:    194, Avg QP:28.69  kb/s: 1404.65 
+x265 [info]: frame B:    288, Avg QP:34.81  kb/s: 204.31  
+x265 [info]: Weighted P-Frames: Y:2.6% UV:2.6%
+
+encoded 500 frames in 16.29s (30.69 fps), 868.72 kb/s, Avg QP:32.11
+
+2025-07-08 13:15:53,096 - video_processor - INFO - Successfully processed video: C:\Users\vm\AppData\Local\Temp\youtube_processor_s12m6y_0\output_hevc_720p.mp4 (2440941 bytes)
+2025-07-08 13:15:53,096 - video_processor - INFO - Uploading to Cloudinary: youtube_hevc_720p/orbkg5JH9C8
+2025-07-08 13:16:06,138 - video_processor - INFO - Successfully uploaded to Cloudinary: https://res.cloudinary.com/dkoumjlli/video/upload/v1751960760/youtube_hevc_720p/youtube_hevc_720p/orbkg5JH9C8.mp4
+2025-07-08 13:16:07,147 - video_processor - INFO - Cleaned up temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_s12m6y_0
+2025-07-08 13:18:38,470 - main - INFO - Processing video: https://youtu.be/DaS1kllkk-4?si=4XVlbX4e-eE866Lc
+2025-07-08 13:18:38,471 - video_processor - INFO - Created temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_pggtcwji
+2025-07-08 13:18:38,471 - video_processor - INFO - Attempting download strategy 1/7: _strategy_best_quality
+2025-07-08 13:18:43,984 - video_processor - INFO - Successfully downloaded: C:\Users\vm\AppData\Local\Temp\youtube_processor_pggtcwji\Ramayana (The Introduction Theme).mp4
+2025-07-08 13:18:43,984 - video_processor - INFO - Successfully downloaded using strategy: _strategy_best_quality
+2025-07-08 13:18:43,985 - video_processor - WARNING - Could not probe input file: , proceeding anyway
+2025-07-08 13:18:43,985 - video_processor - INFO - Running ffmpeg command: ffmpeg -i C:\Users\vm\AppData\Local\Temp\youtube_processor_pggtcwji\Ramayana (The Introduction Theme).mp4 -c:v libx265 -crf 28 -preset medium -vf scale=-2:720 -c:a aac -b:a 96k -movflags +faststart -avoid_negative_ts make_zero -loglevel error -y C:\Users\vm\AppData\Local\Temp\youtube_processor_pggtcwji\output_hevc_720p.mp4
+2025-07-08 13:18:43,988 - video_processor - INFO - Using absolute FFmpeg path: C:\ffmpeg\bin\ffmpeg.EXE
+2025-07-08 13:18:43,989 - video_processor - INFO - Path with spaces detected: C:\Users\vm\AppData\Local\Temp\youtube_processor_pggtcwji\Ramayana (The Introduction Theme).mp4
+2025-07-08 13:18:43,989 - video_processor - INFO - Windows command list: ['C:\\ffmpeg\\bin\\ffmpeg.EXE', '-i', 'C:\\Users\\vm\\AppData\\Local\\Temp\\youtube_processor_pggtcwji\\Ramayana (The Introduction Theme).mp4', '-c:v', 'libx265', '-crf', '28', '-preset', 'medium', '-vf', 'scale=-2:720', '-c:a', 'aac', '-b:a', '96k', '-movflags', '+faststart', '-avoid_negative_ts', 'make_zero', '-loglevel', 'error', '-y', 'C:\\Users\\vm\\AppData\\Local\\Temp\\youtube_processor_pggtcwji\\output_hevc_720p.mp4']
+2025-07-08 13:19:12,870 - video_processor - INFO - FFmpeg completed with return code: 0
+2025-07-08 13:19:12,870 - video_processor - INFO - FFmpeg stderr output: x265 [info]: HEVC encoder version 4.1+188-cd4f0d6e9
+x265 [info]: build info [Windows][GCC 15.1.0][64 bit] 8bit+10bit+12bit
+x265 [info]: using cpu capabilities: MMX2 SSE2Fast LZCNT SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+x265 [info]: Main profile, Level-3 (Main tier)
+x265 [info]: Thread pool created using 8 threads
+x265 [info]: Slices                              : 1
+x265 [info]: frame threads / pool features       : 3 / wpp(12 rows)
+x265 [info]: Coding QT: max CU size, min CU size : 64 / 8
+x265 [info]: Residual QT: max TU size, max depth : 32 / 1 inter / 1 intra
+x265 [info]: ME / range / subpel / merge         : hex / 57 / 2 / 3
+x265 [info]: Keyframe min / max / scenecut / bias  : 25 / 250 / 40 / 5.00 
+x265 [info]: Lookahead / bframes / badapt        : 20 / 4 / 2
+x265 [info]: b-pyramid / weightp / weightb       : 1 / 1 / 0
+x265 [info]: References / ref-limit  cu / depth  : 3 / off / on
+x265 [info]: AQ: mode / str / qg-size / cu-tree  : 2 / 1.0 / 32 / 1
+x265 [info]: Rate Control / qCompress            : CRF-28.0 / 0.60
+x265 [info]: tools: rd=3 psy-rd=2.00 early-skip rskip mode=1 signhide tmvp
+x265 [info]: tools: b-intra strong-intra-smoothing lslices=4 deblock sao
+x265 [info]: tools: dhdr10-info
+x265 [info]: frame I:     16, Avg QP:22.11  kb/s: 8623.70 
+x265 [info]: frame P:   1278, Avg QP:31.92  kb/s: 28.06   
+x265 [info]: frame B:   2604, Avg QP:35.34  kb/s: 11.72   
+x265 [info]: Weighted P-Frames: Y:0.0% UV:0.0%
+
+encoded 3898 frames in 28.26s (137.92 fps), 52.43 kb/s, Avg QP:34.17
+
+2025-07-08 13:19:12,871 - video_processor - INFO - Successfully processed video: C:\Users\vm\AppData\Local\Temp\youtube_processor_pggtcwji\output_hevc_720p.mp4 (3051708 bytes)
+2025-07-08 13:19:12,872 - video_processor - INFO - Uploading to Cloudinary: youtube_hevc_720p/DaS1kllkk-4
+2025-07-08 13:19:39,662 - video_processor - INFO - Successfully uploaded to Cloudinary: https://res.cloudinary.com/dkoumjlli/video/upload/v1751960971/youtube_hevc_720p/youtube_hevc_720p/DaS1kllkk-4.mp4
+2025-07-08 13:19:40,678 - video_processor - INFO - Cleaned up temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_pggtcwji
+2025-07-08 13:26:07,644 - main - INFO - Successfully initialized video processor
+2025-07-08 13:26:58,011 - main - INFO - Processing video: https://youtu.be/-2RAq5o5pwc?si=5QJ5brSkbW7GG9Wc
+2025-07-08 13:26:58,015 - video_processor - INFO - Created temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_edc9r8t8
+2025-07-08 13:26:58,015 - video_processor - INFO - Attempting download strategy 1/7: _strategy_best_quality
+2025-07-08 13:27:12,431 - video_processor - INFO - Successfully downloaded using strategy: _strategy_best_quality
+2025-07-08 13:27:12,432 - video_processor - WARNING - Could not probe input file: , proceeding anyway
+2025-07-08 13:27:12,465 - video_processor - INFO - Using absolute FFmpeg path: C:\ffmpeg\bin\ffmpeg.EXE
+2025-07-08 13:30:20,693 - video_processor - INFO - FFmpeg completed with return code: 0
+2025-07-08 13:30:20,694 - video_processor - INFO - FFmpeg stderr output: x265 [info]: HEVC encoder version 4.1+188-cd4f0d6e9
+x265 [info]: build info [Windows][GCC 15.1.0][64 bit] 8bit+10bit+12bit
+x265 [info]: using cpu capabilities: MMX2 SSE2Fast LZCNT SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+x265 [info]: Main profile, Level-4 (Main tier)
+x265 [info]: Thread pool created using 8 threads
+x265 [info]: Slices                              : 1
+x265 [info]: frame threads / pool features       : 3 / wpp(12 rows)
+x265 [info]: Coding QT: max CU size, min CU size : 64 / 8
+x265 [info]: Residual QT: max TU size, max depth : 32 / 1 inter / 1 intra
+x265 [info]: ME / range / subpel / merge         : hex / 57 / 2 / 3
+x265 [info]: Keyframe min / max / scenecut / bias  : 24 / 250 / 40 / 5.00 
+x265 [info]: Lookahead / bframes / badapt        : 20 / 4 / 2
+x265 [info]: b-pyramid / weightp / weightb       : 1 / 1 / 0
+x265 [info]: References / ref-limit  cu / depth  : 3 / off / on
+x265 [info]: AQ: mode / str / qg-size / cu-tree  : 2 / 1.0 / 32 / 1
+x265 [info]: Rate Control / qCompress            : CRF-28.0 / 0.60
+x265 [info]: tools: rd=3 psy-rd=2.00 early-skip rskip mode=1 signhide tmvp
+x265 [info]: tools: b-intra strong-intra-smoothing lslices=4 deblock sao
+x265 [info]: tools: dhdr10-info
+x265 [info]: frame I:     37, Avg QP:25.57  kb/s: 2165.95 
+x265 [info]: frame P:   1791, Avg QP:28.06  kb/s: 640.38  
+x265 [info]: frame B:   4860, Avg QP:33.93  kb/s: 105.16  
+x265 [info]: Weighted P-Frames: Y:1.1% UV:0.8%
+
+encoded 6688 frames in 187.90s (35.59 fps), 259.89 kb/s, Avg QP:32.31
+
+2025-07-08 13:30:20,695 - video_processor - INFO - Successfully processed video: C:\Users\vm\AppData\Local\Temp\youtube_processor_edc9r8t8\output_hevc_720p.mp4 (12656348 bytes)
+2025-07-08 13:30:20,695 - video_processor - INFO - Uploading to Cloudinary: youtube_hevc_720p/-2RAq5o5pwc
+2025-07-08 13:31:43,016 - video_processor - INFO - Successfully uploaded to Cloudinary: https://res.cloudinary.com/dkoumjlli/video/upload/v1751961637/youtube_hevc_720p/youtube_hevc_720p/-2RAq5o5pwc.mp4
+2025-07-08 13:31:44,028 - video_processor - INFO - Cleaned up temp directory: C:\Users\vm\AppData\Local\Temp\youtube_processor_edc9r8t8
