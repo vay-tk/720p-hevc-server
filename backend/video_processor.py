@@ -602,6 +602,9 @@ class VideoProcessor:
                     '-b:a', '96k',
                     '-shortest',
                     '-movflags', '+faststart',
+                    # Add progress output
+                    '-stats',
+                    '-progress', 'pipe:1',
                     '-y',
                     output_path
                 ]
@@ -618,7 +621,9 @@ class VideoProcessor:
                     '-b:a', '96k',
                     '-movflags', '+faststart',
                     '-avoid_negative_ts', 'make_zero',
-                    '-loglevel', 'error',  # Reduce verbosity but keep errors
+                    # Replace error level with stats
+                    '-stats',
+                    '-progress', 'pipe:1',
                     '-y',
                     output_path
                 ]
@@ -639,7 +644,9 @@ class VideoProcessor:
                     '-map', '1:a:0',
                     '-movflags', '+faststart',
                     '-avoid_negative_ts', 'make_zero',
-                    '-loglevel', 'error',
+                    # Replace error level with stats
+                    '-stats',
+                    '-progress', 'pipe:1',
                     '-y',
                     output_path
                 ]
@@ -663,11 +670,7 @@ class VideoProcessor:
             if os.name == 'nt':
                 logger.info(f"Windows command list: {cmd}")
 
-            # Run ffmpeg with standard subprocess in a thread pool to avoid blocking
-            process = None
-            stdout_data = None
-            stderr_data = None
-            
+            # Run ffmpeg with progress monitoring in a thread pool
             try:
                 # Create environment with explicit PATH to ensure ffmpeg is found
                 env = os.environ.copy()
@@ -679,27 +682,153 @@ class VideoProcessor:
                 
                 # Use the standard subprocess module in a thread pool executor
                 import concurrent.futures
+                import re
+                from datetime import datetime
                 
-                def run_ffmpeg_subprocess():
+                def run_ffmpeg_subprocess_with_progress():
                     try:
-                        # Run the FFmpeg command synchronously in a separate thread
-                        result = subprocess.run(
+                        # Run the FFmpeg command with real-time output monitoring
+                        process = subprocess.Popen(
                             cmd,
                             stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE,
                             env=env,
                             cwd=temp_dir,
-                            check=False  # Don't raise exception on non-zero return code
+                            text=True,
+                            bufsize=1,  # Line buffered
+                            universal_newlines=True,
                         )
-                        return result.returncode, result.stdout, result.stderr
+                        
+                        stdout_lines = []
+                        stderr_lines = []
+                        
+                        # Variables to track progress
+                        start_time = datetime.now()
+                        frame_count = 0
+                        total_frames = None
+                        fps = 0
+                        progress = 0
+                        time_position = "00:00:00"
+                        duration = None
+                        speed = "0x"
+                        last_update_time = datetime.now()
+                        
+                        # Function to print progress update
+                        def print_progress_update():
+                            elapsed = (datetime.now() - start_time).total_seconds()
+                            print(f"\r[FFmpeg] {time_position}", end='')
+                            
+                            if duration:
+                                percent = min(100, int(progress * 100))
+                                progress_bar = f" [{percent:3d}%] "
+                                print(f"{progress_bar}", end='')
+                            
+                            if fps > 0:
+                                print(f" {fps:.1f} fps", end='')
+                            
+                            if speed:
+                                print(f" {speed}", end='')
+                            
+                            if frame_count:
+                                print(f" [{frame_count} frames]", end='')
+                                
+                            print("     ", end='', flush=True)
+                        
+                        # Process stderr for FFmpeg progress info
+                        while process.poll() is None:
+                            # Check stderr for progress info
+                            if process.stderr:
+                                stderr_line = process.stderr.readline()
+                                if stderr_line:
+                                    stderr_lines.append(stderr_line)
+                                    
+                                    # Parse frame info
+                                    frame_match = re.search(r'frame=\s*(\d+)', stderr_line)
+                                    if frame_match:
+                                        frame_count = int(frame_match.group(1))
+                                    
+                                    # Parse FPS
+                                    fps_match = re.search(r'fps=\s*(\d+\.?\d*)', stderr_line)
+                                    if fps_match:
+                                        fps = float(fps_match.group(1))
+                                        
+                                    # Parse time position
+                                    time_match = re.search(r'time=\s*(\d+:\d+:\d+\.\d+)', stderr_line)
+                                    if time_match:
+                                        time_position = time_match.group(1)
+                                        
+                                        # Try to calculate progress if we have duration
+                                        if not duration:
+                                            # Try to parse duration
+                                            duration_match = re.search(r'Duration: (\d+:\d+:\d+\.\d+)', '\n'.join(stderr_lines))
+                                            if duration_match:
+                                                duration = duration_match.group(1)
+                                        
+                                        if duration:
+                                            # Convert time strings to seconds
+                                            def time_to_seconds(time_str):
+                                                h, m, s = time_str.split(':')
+                                                return int(h) * 3600 + int(m) * 60 + float(s)
+                                            
+                                            pos_seconds = time_to_seconds(time_position.split('.')[0])
+                                            dur_seconds = time_to_seconds(duration.split('.')[0])
+                                            progress = pos_seconds / dur_seconds if dur_seconds > 0 else 0
+                                    
+                                    # Parse speed
+                                    speed_match = re.search(r'speed=\s*(\d+\.?\d*x)', stderr_line)
+                                    if speed_match:
+                                        speed = speed_match.group(1)
+                                    
+                                    # Only update UI at most once every 0.5 seconds to avoid excessive output
+                                    current_time = datetime.now()
+                                    if (current_time - last_update_time).total_seconds() >= 0.5:
+                                        print_progress_update()
+                                        last_update_time = current_time
+                            
+                            # Check stdout
+                            if process.stdout:
+                                stdout_line = process.stdout.readline()
+                                if stdout_line:
+                                    stdout_lines.append(stdout_line)
+                                    
+                                    # Parse progress information from pipe format
+                                    if '=' in stdout_line:
+                                        key, value = stdout_line.strip().split('=', 1)
+                                        if key == 'frame':
+                                            frame_count = int(value)
+                                        elif key == 'fps':
+                                            fps = float(value)
+                                        elif key == 'out_time_ms':
+                                            ms = int(value)
+                                            seconds = ms / 1000000
+                                            h = int(seconds // 3600)
+                                            m = int((seconds % 3600) // 60)
+                                            s = seconds % 60
+                                            time_position = f"{h:02d}:{m:02d}:{s:06.3f}"
+                                        elif key == 'progress' and value == 'end':
+                                            progress = 1.0  # 100% complete
+                                            print_progress_update()
+                        
+                        # Get final outputs
+                        stdout_remainder, stderr_remainder = process.communicate()
+                        
+                        if stdout_remainder:
+                            stdout_lines.append(stdout_remainder)
+                        if stderr_remainder:
+                            stderr_lines.append(stderr_remainder)
+                        
+                        # Print final progress
+                        print("\n[FFmpeg] Conversion complete!")
+                        
+                        return process.returncode, ''.join(stdout_lines), ''.join(stderr_lines)
                     except Exception as e:
                         logger.error(f"Error in ffmpeg subprocess thread: {str(e)}")
-                        return -1, None, str(e).encode('utf-8')
+                        return -1, None, str(e)
                 
                 # Execute in thread pool with timeout
                 with concurrent.futures.ThreadPoolExecutor() as pool:
                     # Submit the task to the thread pool
-                    future = pool.submit(run_ffmpeg_subprocess)
+                    future = pool.submit(run_ffmpeg_subprocess_with_progress)
                     
                     try:
                         # Wait for the result with a timeout
@@ -712,7 +841,7 @@ class VideoProcessor:
                         # We can't directly terminate the process from here
                         # The future will be canceled when the pool is shutdown
                         return {'success': False, 'error': 'Video processing timed out (30 minutes limit)'}
-            
+
             except FileNotFoundError as e:
                 logger.error(f"FFmpeg executable not found: {str(e)}", exc_info=True)
                 return {'success': False, 'error': f'FFmpeg not found. Error: {str(e)}'}
