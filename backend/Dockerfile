@@ -21,6 +21,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
+# Make startup script executable
+COPY start.sh .
+RUN chmod +x start.sh
 
 # Set environment variables
 ENV PORT=8000
@@ -29,5 +32,5 @@ ENV PYTHONUNBUFFERED=1
 # Expose port
 EXPOSE 8000
 
-# Start the application
-CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "${PORT:-8000}"]
+# Use the startup script
+CMD ["./start.sh"]
