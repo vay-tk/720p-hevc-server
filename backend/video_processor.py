@@ -125,6 +125,9 @@ class VideoProcessor:
 
     async def _strategy_best_quality(self, url: str, temp_dir: str) -> Dict[str, Any]:
         """Strategy 1: Best quality with standard options"""
+        # Updated modern user agent
+        user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
+        
         ydl_opts = {
             'format': 'best[height<=720][ext=mp4]/best[height<=720]/best[ext=mp4]/best/worst',
             'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
@@ -136,7 +139,28 @@ class VideoProcessor:
             'ignoreerrors': False,
             'no_warnings': False,
             'quiet': False,
-            'verbose': False
+            'verbose': False,
+            'http_headers': {
+                'User-Agent': user_agent,
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Connection': 'keep-alive',
+                'Upgrade-Insecure-Requests': '1',
+                'Sec-Fetch-Dest': 'document',
+                'Sec-Fetch-Mode': 'navigate',
+                'Sec-Fetch-Site': 'none',
+                'Sec-Fetch-User': '?1',
+                'TE': 'trailers',
+            },
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['web', 'android'],
+                    'player_skip': [],
+                    'innertube_host': ['www.youtube.com'],
+                    'innertube_key': ['AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8']
+                }
+            }
         }
         
         return await self._download_with_options(url, temp_dir, ydl_opts)
@@ -144,6 +168,9 @@ class VideoProcessor:
     async def _strategy_with_cookies(self, url: str, temp_dir: str) -> Dict[str, Any]:
         """Strategy 2: Use cookies to handle login/age restrictions"""
         cookies_path = os.path.join(os.path.dirname(__file__), 'cookies.txt')
+        
+        # Updated modern user agent with desktop browser
+        user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15'
         
         ydl_opts = {
             'format': 'best[height<=720][ext=mp4]/best[height<=720]/best[ext=mp4]/best/worst',
@@ -154,12 +181,25 @@ class VideoProcessor:
             'quiet': False,
             'cookiefile': cookies_path if os.path.exists(cookies_path) else None,
             'http_headers': {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                'User-Agent': user_agent,
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Referer': 'https://www.youtube.com/',
+                'Connection': 'keep-alive',
+                'Upgrade-Insecure-Requests': '1',
+                'Sec-Fetch-Dest': 'document',
+                'Sec-Fetch-Mode': 'navigate', 
+                'Sec-Fetch-Site': 'same-origin',
+                'Sec-Fetch-User': '?1',
+                'Cache-Control': 'max-age=0',
             },
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android', 'web'],
-                    'player_skip': ['configs']
+                    'player_client': ['web', 'android', 'ios'],
+                    'player_skip': [],
+                    'innertube_host': ['www.youtube.com'],
+                    'innertube_key': ['AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8']
                 }
             }
         }
@@ -171,18 +211,33 @@ class VideoProcessor:
 
     async def _strategy_mobile_user_agent(self, url: str, temp_dir: str) -> Dict[str, Any]:
         """Strategy 3: Use mobile user agent to bypass some restrictions"""
+        # Updated modern iOS user agent
+        user_agent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1'
+        
         ydl_opts = {
             'format': 'best[height<=480]/worst',
             'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
             'noplaylist': True,
             'quiet': False,
             'http_headers': {
-                'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1'
+                'User-Agent': user_agent,
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Connection': 'keep-alive',
+                'Referer': 'https://m.youtube.com/',
+                'Upgrade-Insecure-Requests': '1',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Sec-Fetch-Site': 'same-origin',
+                'Sec-Fetch-Mode': 'cors',
+                'Sec-Fetch-Dest': 'empty',
             },
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android'],
-                    'player_skip': ['configs', 'webpage']
+                    'player_client': ['ios', 'android'],
+                    'player_skip': [],
+                    'innertube_host': ['m.youtube.com', 'youtubei.googleapis.com'],
+                    'innertube_key': ['AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8', 'AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc']
                 }
             }
         }
@@ -191,6 +246,9 @@ class VideoProcessor:
 
     async def _strategy_bypass_geo(self, url: str, temp_dir: str) -> Dict[str, Any]:
         """Strategy 4: Attempt to bypass geo-restrictions"""
+        # Rotating through user agents - Android device
+        user_agent = 'Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.6312.40 Mobile Safari/537.36'
+        
         ydl_opts = {
             'format': 'worst/best',
             'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
@@ -199,12 +257,23 @@ class VideoProcessor:
             'geo_bypass': True,
             'geo_bypass_country': 'US',
             'http_headers': {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                'User-Agent': user_agent,
+                'Accept': '*/*',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Accept-Encoding': 'gzip, deflate',
+                'Origin': 'https://www.youtube.com',
+                'Connection': 'keep-alive',
+                'Referer': 'https://www.youtube.com/',
+                'X-YouTube-Client-Name': '2', 
+                'X-YouTube-Client-Version': '2.20240701.01.00',
             },
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android'],
-                    'player_skip': ['configs', 'webpage']
+                    'player_client': ['android', 'web'],
+                    'player_skip': [],
+                    'innertube_host': ['youtubei.googleapis.com'],
+                    'innertube_key': ['AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc'],
+                    'use_player_response': ['True']
                 }
             }
         }
@@ -213,16 +282,35 @@ class VideoProcessor:
 
     async def _strategy_worst_quality(self, url: str, temp_dir: str) -> Dict[str, Any]:
         """Strategy 5: Fallback to worst quality if others fail"""
+        # Use "evergreen" browser UA to avoid fingerprinting
+        user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0'
+        
         ydl_opts = {
             'format': 'worst',
             'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
             'noplaylist': True,
             'quiet': False,
             'ignoreerrors': True,
+            'http_headers': {
+                'User-Agent': user_agent,
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'DNT': '1',
+                'Connection': 'keep-alive',
+                'Referer': 'https://www.google.com/',
+                'Upgrade-Insecure-Requests': '1',
+                'Sec-Fetch-Dest': 'document',
+                'Sec-Fetch-Mode': 'navigate', 
+                'Sec-Fetch-User': '?1',
+                'Sec-GPC': '1',
+            },
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android'],
-                    'player_skip': ['configs', 'webpage', 'js']
+                    'player_client': ['web', 'tv_embedded', 'android'],
+                    'player_skip': [],
+                    'innertube_host': ['www.youtube.com'],
+                    'innertube_key': ['AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8']
                 }
             }
         }
@@ -231,6 +319,9 @@ class VideoProcessor:
 
     async def _strategy_legacy_formats(self, url: str, temp_dir: str) -> Dict[str, Any]:
         """Strategy 6: Try legacy format selection"""
+        # Smart TV user agent
+        user_agent = 'Mozilla/5.0 (SMART-TV; Linux; Tizen 5.5) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/3.0 Chrome/69.0.3497.106 TV Safari/537.36'
+        
         ydl_opts = {
             'format': '18/22/36/17/13/5',  # Legacy format codes
             'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
@@ -238,11 +329,23 @@ class VideoProcessor:
             'quiet': False,
             'ignoreerrors': True,
             'prefer_insecure': True,
+            'http_headers': {
+                'User-Agent': user_agent,
+                'Accept': '*/*',
+                'Accept-Language': 'en-US,en;q=0.5',
+                'Accept-Encoding': 'gzip, deflate',
+                'Origin': 'https://www.youtube.com',
+                'Connection': 'keep-alive',
+                'Referer': 'https://www.youtube.com/',
+                'X-YouTube-Client-Name': '3',
+                'X-YouTube-Client-Version': '16.20'
+            },
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android'],
-                    'player_skip': ['configs', 'webpage', 'js'],
-                    'skip': ['hls', 'dash']
+                    'player_client': ['tv_embedded', 'android'],
+                    'player_skip': [],
+                    'innertube_host': ['youtubei.googleapis.com'],
+                    'innertube_key': ['AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8', 'AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc']
                 }
             }
         }
@@ -251,16 +354,31 @@ class VideoProcessor:
 
     async def _strategy_audio_only_fallback(self, url: str, temp_dir: str) -> Dict[str, Any]:
         """Strategy 7: Last resort - audio only (will be converted to video with static image)"""
+        # Game console user agent
+        user_agent = 'Mozilla/5.0 (PlayStation; PlayStation 5/2.26) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0 Safari/605.1.15'
+        
         ydl_opts = {
             'format': 'bestaudio[ext=m4a]/bestaudio[ext=mp3]/bestaudio',
             'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
             'noplaylist': True,
             'quiet': False,
             'ignoreerrors': True,
+            'http_headers': {
+                'User-Agent': user_agent,
+                'Accept': '*/*',
+                'Accept-Language': 'en-US,en;q=0.8',
+                'Accept-Encoding': 'gzip, deflate',
+                'Connection': 'keep-alive',
+                'Referer': 'https://www.youtube.com/',
+                'X-YouTube-Client-Name': '5',
+                'X-YouTube-Client-Version': '16.20'
+            },
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android'],
-                    'player_skip': ['configs', 'webpage', 'js']
+                    'player_client': ['tv_embedded', 'android', 'web'],
+                    'player_skip': [],
+                    'innertube_host': ['youtubei.googleapis.com'],
+                    'innertube_key': ['AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc']
                 }
             }
         }
@@ -289,13 +407,17 @@ class VideoProcessor:
                 'skip_unavailable_fragments': True,
                 'keep_fragments': False,
                 'abort_on_unavailable_fragment': False,
-                'extractor_args': {
-                    'youtube': {
-                        'player_client': ['android', 'web'],
-                        'player_skip': ['configs'],
-                        'skip': ['hls', 'dash']
-                    }
-                }
+                # Enable debugging for YouTube related issues
+                'debug_printtraffic': self.settings.debug,
+                # Add proxy support if configured
+                'proxy': os.environ.get('HTTP_PROXY', None),
+                # Add cookies from environment if file not found
+                'cookiesfrombrowser': ('chrome',) if not ydl_opts.get('cookiefile') else None,
+                # Request page for longer and with randomization to avoid bot detection
+                'sleep_interval': random.uniform(1.0, 3.0),
+                'max_sleep_interval': 5.0,
+                'sleep_interval_requests': 1,
+                'sleep_interval_subtitles': 0,
             })
             
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -318,6 +440,9 @@ class VideoProcessor:
                     elif 'premieres in' in error_msg:
                         return {'success': False, 'error': 'Video is a premiere and not yet available'}
                     raise
+                
+                # Add some randomization to appear less bot-like
+                await asyncio.sleep(random.uniform(0.5, 2.0))
                 
                 # Download the video
                 try:
