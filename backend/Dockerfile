@@ -10,6 +10,8 @@ RUN apt-get update && \
     ffmpeg \
     libx265-dev \
     curl \
+    wget \
+    ca-certificates \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -26,11 +28,16 @@ COPY . .
 COPY start.sh .
 RUN chmod +x start.sh
 
+# Generate a fresh cookies file template
+RUN echo "# Netscape HTTP Cookie File\n# https://curl.se/docs/http-cookies.html\n# Please place actual YouTube cookies here for bot detection bypass\n" > cookies.txt && \
+    chmod 600 cookies.txt
+
 # Set environment variables
 ENV PORT=8000
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONFAULTHANDLER=1
 ENV COLORTERM=truecolor
+ENV MAX_VIDEO_SIZE_MB=500
 
 # Optional: Download latest version of yt-dlp to overcome YouTube API changes
 RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp && \
