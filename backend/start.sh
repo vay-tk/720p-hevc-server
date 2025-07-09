@@ -19,6 +19,10 @@ if [ -f "/.dockerenv" ] || [ -f "/run/.containerenv" ]; then
     export FFMPEG_OPTS="-hide_banner -nostats"
     # Enable colorized output
     export COLORTERM=truecolor
+    # Set cloud optimization flag
+    export CLOUD_OPTIMIZED=1
+    # Increase FFmpeg timeout for cloud environment
+    export FFMPEG_TIMEOUT=1800
 fi
 
 # Check for FFmpeg
@@ -28,15 +32,15 @@ else
     echo "❌ FFmpeg not found! Video processing will fail."
 fi
 
-# Check for Cloudinary credentials
-if [ -z "$CLOUDINARY_CLOUD_NAME" ] || [ -z "$CLOUDINARY_API_KEY" ] || [ -z "$CLOUDINARY_API_SECRET" ]; then
-    echo "⚠️ Warning: Cloudinary credentials not set or incomplete"
-fi
-
 # Update yt-dlp to the latest version to handle YouTube API changes
 echo "🔄 Updating yt-dlp to latest version..."
 python -m pip install --upgrade yt-dlp
 echo "✅ yt-dlp updated successfully"
+
+# Run FFmpeg capability check to optimize settings
+echo "🔧 Checking FFmpeg capabilities for optimal settings..."
+python check_ffmpeg.py
+echo ""
 
 # Show YouTube download optimization status
 if [ -f "cookies.txt" ]; then
@@ -61,5 +65,14 @@ echo "📡 Starting server on http://0.0.0.0:$PORT"
 echo "📚 API docs available at http://0.0.0.0:$PORT/docs"
 echo "===========================================" 
 
-# Start the application with the appropriate port
-exec python -m uvicorn main:app --host 0.0.0.0 --port $PORT
+# Set optimization flags for cloud environments
+if [ -n "$CLOUD_OPTIMIZED" ]; then
+    echo "🚀 Cloud optimization enabled"
+    export FFMPEG_PRESET=veryfast
+    export VIDEO_CODEC=libx264
+    export MAX_RESOLUTION=480
+    exec python -m uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1
+else
+    # Start the application with the appropriate port
+    exec python -m uvicorn main:app --host 0.0.0.0 --port $PORT
+fi
