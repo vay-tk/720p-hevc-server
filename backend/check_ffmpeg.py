@@ -113,14 +113,15 @@ def check_ffmpeg() -> Dict[str, Any]:
                         result["encoders"].append(encoder)
             
             # Run a quick encoding test to measure performance
-            result.update(run_encoding_test())
+            perf_results = run_encoding_test(result)
+            result.update(perf_results)
             
     except (subprocess.SubprocessError, FileNotFoundError) as e:
         logger.error(f"Error checking FFmpeg: {e}")
     
     return result
 
-def run_encoding_test() -> Dict[str, Any]:
+def run_encoding_test(ffmpeg_info: Dict[str, Any]) -> Dict[str, Any]:
     """Run a quick encoding test to measure performance"""
     results = {
         "performance_test": "not_run",
@@ -130,6 +131,10 @@ def run_encoding_test() -> Dict[str, Any]:
         "recommended_codec": "libx264",
         "resource_constrained": False
     }
+    
+    # Check if ffmpeg is available at all before proceeding
+    if not ffmpeg_info.get("available", False):
+        return results
     
     try:
         # Create a 5-second test video using FFmpeg
@@ -159,25 +164,29 @@ def run_encoding_test() -> Dict[str, Any]:
         
         # HEVC test (if available)
         hevc_fps = None
-        if results["hevc_support"]:
+        if ffmpeg_info.get("hevc_support", False):
             hevc_cmd = f"ffmpeg {test_input} -c:v libx265 -preset ultrafast -f null -"
-            hevc_process = subprocess.run(
-                hevc_cmd, 
-                shell=True, 
-                stdout=subprocess.PIPE, 
-                stderr=subprocess.PIPE,
-                text=True,
-                timeout=15
-            )
-            
-            if hevc_process.returncode == 0:
-                for line in hevc_process.stderr.splitlines():
-                    if "fps=" in line and "time=" in line:
-                        fps_parts = line.split("fps=")[1].split()[0]
-                        try:
-                            hevc_fps = float(fps_parts)
-                        except ValueError:
-                            pass
+            try:
+                hevc_process = subprocess.run(
+                    hevc_cmd, 
+                    shell=True, 
+                    stdout=subprocess.PIPE, 
+                    stderr=subprocess.PIPE,
+                    text=True,
+                    timeout=15
+                )
+                
+                if hevc_process.returncode == 0:
+                    for line in hevc_process.stderr.splitlines():
+                        if "fps=" in line and "time=" in line:
+                            fps_parts = line.split("fps=")[1].split()[0]
+                            try:
+                                hevc_fps = float(fps_parts)
+                            except ValueError:
+                                pass
+            except Exception as e:
+                logger.warning(f"HEVC encoding test failed: {e}")
+                # Continue with just the h264 results
         
         results["fps_h264"] = h264_fps
         results["fps_hevc"] = hevc_fps
@@ -194,13 +203,18 @@ def run_encoding_test() -> Dict[str, Any]:
                 results["recommended_codec"] = "libx264"
             elif h264_fps < 60:
                 results["recommended_preset"] = "fast" 
-                results["recommended_codec"] = "libx264" if not results["hevc_support"] or not hevc_fps or hevc_fps < 15 else "libx265"
+                has_good_hevc = ffmpeg_info.get("hevc_support", False) and hevc_fps and hevc_fps >= 15
+                results["recommended_codec"] = "libx265" if has_good_hevc else "libx264"
             else:
                 results["recommended_preset"] = "medium"
-                results["recommended_codec"] = "libx264" if not results["hevc_support"] or not hevc_fps or hevc_fps < 30 else "libx265"
+                has_good_hevc = ffmpeg_info.get("hevc_support", False) and hevc_fps and hevc_fps >= 30
+                results["recommended_codec"] = "libx265" if has_good_hevc else "libx264"
         
     except (subprocess.SubprocessError, FileNotFoundError) as e:
         logger.error(f"Error running encoding test: {e}")
+        results["performance_test"] = f"failed: {str(e)}"
+    except Exception as e:
+        logger.error(f"Unexpected error in encoding test: {e}")
         results["performance_test"] = f"failed: {str(e)}"
     
     return results
