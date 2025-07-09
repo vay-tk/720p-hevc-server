@@ -33,16 +33,27 @@ if [ -z "$CLOUDINARY_CLOUD_NAME" ] || [ -z "$CLOUDINARY_API_KEY" ] || [ -z "$CLO
     echo "⚠️ Warning: Cloudinary credentials not set or incomplete"
 fi
 
+# Update yt-dlp to the latest version to handle YouTube API changes
+echo "🔄 Updating yt-dlp to latest version..."
+python -m pip install --upgrade yt-dlp
+echo "✅ yt-dlp updated successfully"
+
 # Show YouTube download optimization status
 if [ -f "cookies.txt" ]; then
     COOKIE_SIZE=$(wc -c < cookies.txt)
     if [ $COOKIE_SIZE -gt 100 ]; then
         echo "🍪 YouTube cookies found (~${COOKIE_SIZE} bytes) - Enhanced access enabled"
+        # Set proper permissions
+        chmod 600 cookies.txt
     else
         echo "⚠️ YouTube cookies file exists but appears empty"
     fi
 else
     echo "ℹ️ No YouTube cookies file found - Access to restricted videos may be limited"
+    # Create empty cookies template
+    echo "# Netscape HTTP Cookie File - Empty template" > cookies.txt
+    echo "# Get YouTube cookies using a browser extension and place them here" >> cookies.txt
+    chmod 600 cookies.txt
 fi
 
 echo "===========================================" 
