@@ -14,12 +14,53 @@ import cloudinary
 import cloudinary.uploader
 from cloudinary.utils import cloudinary_url
 
+# Import the new FFmpeg capability checker
+try:
+    from check_ffmpeg import get_recommended_ffmpeg_settings
+except ImportError:
+    # Define a fallback function if the module is not available
+    def get_recommended_ffmpeg_settings():
+        return {"recommendations": {
+            "codec": "libx264",
+            "preset": "medium",
+            "crf": 23,
+            "scale": "-2:720",
+            "threads": 2,
+            "audio_codec": "aac",
+            "audio_bitrate": "96k"
+        }}
+
 logger = logging.getLogger(__name__)
 
 class VideoProcessor:
     def __init__(self, settings):
         self.settings = settings
         self.setup_cloudinary()
+        
+        # Determine if we're in a resource-constrained environment
+        try:
+            self.ffmpeg_settings = get_recommended_ffmpeg_settings()
+            self.is_constrained = self.ffmpeg_settings["recommendations"].get("status") in [
+                "resource_constrained", "container_environment"
+            ]
+            logger.info(f"Resource constrained environment detected: {self.is_constrained}")
+            
+            # Log the recommended encoding settings
+            recommendations = self.ffmpeg_settings["recommendations"]
+            logger.info(f"Using encoding settings: codec={recommendations.get('codec')}, "
+                       f"preset={recommendations.get('preset')}, crf={recommendations.get('crf')}")
+        except Exception as e:
+            logger.warning(f"Error checking FFmpeg capabilities: {str(e)}")
+            self.is_constrained = False
+            self.ffmpeg_settings = {"recommendations": {
+                "codec": "libx264",
+                "preset": "medium",
+                "crf": 23,
+                "scale": "-2:720",
+                "threads": 2,
+                "audio_codec": "aac",
+                "audio_bitrate": "96k"
+            }}
         
     def setup_cloudinary(self):
         """Configure Cloudinary with credentials"""
@@ -68,7 +109,12 @@ class VideoProcessor:
                 'duration': download_result['video_info'].get('duration'),
                 'filesize': upload_result.get('filesize'),
                 'video_id': download_result['video_info'].get('id'),
-                'title': download_result['video_info'].get('title')
+                'title': download_result['video_info'].get('title'),
+                'encoding_info': {
+                    'codec': self.ffmpeg_settings["recommendations"].get('codec'),
+                    'preset': self.ffmpeg_settings["recommendations"].get('preset'),
+                    'resolution': self.ffmpeg_settings["recommendations"].get('scale').split(':')[1] + 'p'
+                }
             }
             
         except Exception as e:
@@ -546,10 +592,10 @@ class VideoProcessor:
 
     async def process_with_ffmpeg(self, video_path: str, audio_path: Optional[str], temp_dir: str) -> Dict[str, Any]:
         """
-        Process video with ffmpeg to HEVC 720p with enhanced error handling
+        Process video with ffmpeg using adaptive settings based on environment capabilities
         """
         try:
-            output_path = os.path.join(temp_dir, 'output_hevc_720p.mp4')
+            output_path = os.path.join(temp_dir, 'output_processed.mp4')
             
             # Check if input is audio-only
             is_audio_only = video_path.endswith(('.m4a', '.mp3', '.wav'))
@@ -597,7 +643,17 @@ class VideoProcessor:
                 has_video = not is_audio_only
                 has_audio = True
 
-            # Build FFmpeg command based on input type
+            # Get recommended encoding settings based on environment
+            recommendations = self.ffmpeg_settings["recommendations"]
+            codec = recommendations.get("codec", "libx264")
+            preset = recommendations.get("preset", "medium")
+            crf = recommendations.get("crf", 23)
+            scale = recommendations.get("scale", "-2:720")
+            threads = recommendations.get("threads", 2)
+            audio_codec = recommendations.get("audio_codec", "aac")
+            audio_bitrate = recommendations.get("audio_bitrate", "96k")
+
+            # Build FFmpeg command based on input type and resource constraints
             if is_audio_only or not has_video:
                 # Create video from audio with static image
                 cmd = [
@@ -605,11 +661,12 @@ class VideoProcessor:
                     '-f', 'lavfi',
                     '-i', 'color=c=black:s=1280x720:r=1',
                     '-i', video_path,
-                    '-c:v', 'libx265',
-                    '-crf', '28',
-                    '-preset', 'medium',
-                    '-c:a', 'aac',
-                    '-b:a', '96k',
+                    '-c:v', codec,
+                    '-crf', str(crf),
+                    '-preset', preset,
+                    '-c:a', audio_codec,
+                    '-b:a', audio_bitrate,
+                    '-threads', str(threads),
                     '-shortest',
                     '-movflags', '+faststart',
                     # Add progress output
@@ -619,19 +676,20 @@ class VideoProcessor:
                     output_path
                 ]
             else:
-                # Standard video processing with simplified approach
+                # Standard video processing with adaptive settings
                 cmd = [
                     'ffmpeg',
                     '-i', video_path,
-                    '-c:v', 'libx265',
-                    '-crf', '28',
-                    '-preset', 'medium',
-                    '-vf', 'scale=-2:720',  # Simplified scaling
-                    '-c:a', 'aac',
-                    '-b:a', '96k',
+                    '-c:v', codec,
+                    '-crf', str(crf),
+                    '-preset', preset,
+                    '-vf', f'scale={scale}',
+                    '-c:a', audio_codec,
+                    '-b:a', audio_bitrate,
+                    '-threads', str(threads),
                     '-movflags', '+faststart',
                     '-avoid_negative_ts', 'make_zero',
-                    # Replace error level with stats
+                    # Add progress output
                     '-stats',
                     '-progress', 'pipe:1',
                     '-y',
@@ -644,17 +702,18 @@ class VideoProcessor:
                     'ffmpeg',
                     '-i', video_path,
                     '-i', audio_path,
-                    '-c:v', 'libx265',
-                    '-crf', '28',
-                    '-preset', 'medium',
-                    '-vf', 'scale=-2:720',
-                    '-c:a', 'aac',
-                    '-b:a', '96k',
+                    '-c:v', codec,
+                    '-crf', str(crf),
+                    '-preset', preset,
+                    '-vf', f'scale={scale}',
+                    '-c:a', audio_codec,
+                    '-b:a', audio_bitrate,
+                    '-threads', str(threads),
                     '-map', '0:v:0',
                     '-map', '1:a:0',
                     '-movflags', '+faststart',
                     '-avoid_negative_ts', 'make_zero',
-                    # Replace error level with stats
+                    # Add progress output
                     '-stats',
                     '-progress', 'pipe:1',
                     '-y',
@@ -679,6 +738,11 @@ class VideoProcessor:
             # Log the command for debugging
             if os.name == 'nt':
                 logger.info(f"Windows command list: {cmd}")
+
+            # Set a timeout based on environment constraints
+            max_timeout = 600  # 10 minutes default
+            if self.is_constrained:
+                max_timeout = 1800  # 30 minutes for constrained environments
 
             # Run ffmpeg with progress monitoring in a thread pool
             try:
@@ -844,13 +908,13 @@ class VideoProcessor:
                         # Wait for the result with a timeout
                         returncode, stdout_data, stderr_data = await asyncio.get_event_loop().run_in_executor(
                             None, 
-                            lambda: future.result(timeout=1800)  # 30 minutes timeout
+                            lambda: future.result(timeout=max_timeout)
                         )
                     except concurrent.futures.TimeoutError:
-                        logger.error("FFmpeg processing timed out")
+                        logger.error(f"FFmpeg processing timed out after {max_timeout} seconds")
                         # We can't directly terminate the process from here
                         # The future will be canceled when the pool is shutdown
-                        return {'success': False, 'error': 'Video processing timed out (30 minutes limit)'}
+                        return {'success': False, 'error': f'Video processing timed out ({max_timeout} seconds limit)'}
 
             except FileNotFoundError as e:
                 logger.error(f"FFmpeg executable not found: {str(e)}", exc_info=True)
@@ -914,7 +978,10 @@ class VideoProcessor:
 
             return {
                 'success': True,
-                'output_path': output_path
+                'output_path': output_path,
+                'codec': codec,
+                'preset': preset,
+                'resolution': scale.split(':')[1] + 'p'
             }
             
         except Exception as e:
