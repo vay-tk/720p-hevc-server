@@ -12,6 +12,8 @@ import uvicorn
 
 from video_processor import VideoProcessor
 from config import get_settings
+# Import the YouTube utilities
+from youtube_utils import check_youtube_connectivity
 
 # Configure logging
 logging.basicConfig(
@@ -262,6 +264,30 @@ async def process_video(
                 "suggestion": "Check server logs for detailed error information"
             }
         )
+
+@app.get("/youtube-status")
+async def youtube_status():
+    """
+    Check YouTube connectivity and bot detection status
+    """
+    status = check_youtube_connectivity()
+    
+    # Add additional system context
+    status["service"] = "youtube-video-processor"
+    
+    if status.get("bot_detection_active", True) and not status.get("cookies_valid", False):
+        status["recommendation"] = "Update cookies.txt with valid YouTube session cookies"
+    elif status.get("bot_detection_active", True):
+        status["recommendation"] = "YouTube bot detection is active. Even with valid cookies, downloads may fail"
+    
+    if not status.get("accessible", False):
+        status["system_status"] = "unhealthy"
+    elif status.get("bot_detection_active", True) and not status.get("cookies_valid", False):
+        status["system_status"] = "degraded"
+    else:
+        status["system_status"] = "healthy"
+        
+    return status
 
 if __name__ == "__main__":
     uvicorn.run(
