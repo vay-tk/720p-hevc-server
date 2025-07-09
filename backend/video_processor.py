@@ -125,8 +125,8 @@ class VideoProcessor:
 
     async def _strategy_best_quality(self, url: str, temp_dir: str) -> Dict[str, Any]:
         """Strategy 1: Best quality with standard options"""
-        # Updated modern user agent
-        user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
+        # Updated modern user agent - using Firefox instead of Chrome to avoid bot detection
+        user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0'
         
         ydl_opts = {
             'format': 'best[height<=720][ext=mp4]/best[height<=720]/best[ext=mp4]/best/worst',
@@ -142,7 +142,7 @@ class VideoProcessor:
             'verbose': False,
             'http_headers': {
                 'User-Agent': user_agent,
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
                 'Accept-Language': 'en-US,en;q=0.5',
                 'Accept-Encoding': 'gzip, deflate, br',
                 'Connection': 'keep-alive',
@@ -152,13 +152,19 @@ class VideoProcessor:
                 'Sec-Fetch-Site': 'none',
                 'Sec-Fetch-User': '?1',
                 'TE': 'trailers',
+                'DNT': '1',
             },
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['web', 'android'],
+                    # Updated player clients and keys
+                    'player_client': ['web', 'android', 'ios'],
                     'player_skip': [],
-                    'innertube_host': ['www.youtube.com'],
-                    'innertube_key': ['AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8']
+                    'innertube_host': ['www.youtube.com', 'youtubei.googleapis.com'],
+                    'innertube_key': [
+                        'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8',  # Web
+                        'AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc',  # Mobile
+                        'AIzaSyDCU8hByM-4DrUqRUYnGn-3llEO78bcxq8'   # Android TV
+                    ]
                 }
             }
         }
@@ -169,7 +175,7 @@ class VideoProcessor:
         """Strategy 2: Use cookies to handle login/age restrictions"""
         cookies_path = os.path.join(os.path.dirname(__file__), 'cookies.txt')
         
-        # Updated modern user agent with desktop browser
+        # Updated modern user agent with Safari on macOS
         user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15'
         
         ydl_opts = {
@@ -198,8 +204,11 @@ class VideoProcessor:
                 'youtube': {
                     'player_client': ['web', 'android', 'ios'],
                     'player_skip': [],
-                    'innertube_host': ['www.youtube.com'],
-                    'innertube_key': ['AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8']
+                    'innertube_host': ['www.youtube.com', 'youtubei.googleapis.com'],
+                    'innertube_key': [
+                        'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8',
+                        'AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc'
+                    ]
                 }
             }
         }
@@ -247,7 +256,7 @@ class VideoProcessor:
     async def _strategy_bypass_geo(self, url: str, temp_dir: str) -> Dict[str, Any]:
         """Strategy 4: Attempt to bypass geo-restrictions"""
         # Rotating through user agents - Android device
-        user_agent = 'Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.6312.40 Mobile Safari/537.36'
+        user_agent = 'Mozilla/5.0 (Linux; Android 13; SM-S908B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36'
         
         ydl_opts = {
             'format': 'worst/best',
@@ -411,8 +420,8 @@ class VideoProcessor:
                 'debug_printtraffic': self.settings.debug,
                 # Add proxy support if configured
                 'proxy': os.environ.get('HTTP_PROXY', None),
-                # Add cookies from environment if file not found
-                'cookiesfrombrowser': ('chrome',) if not ydl_opts.get('cookiefile') else None,
+                # IMPORTANT: Disable cookiesfrombrowser to avoid failures in Docker/containers
+                'cookiesfrombrowser': None,
                 # Request page for longer and with randomization to avoid bot detection
                 'sleep_interval': random.uniform(1.0, 3.0),
                 'max_sleep_interval': 5.0,
@@ -432,7 +441,8 @@ class VideoProcessor:
                     if any(phrase in error_msg for phrase in [
                         'sign in to confirm', 'not a bot', 'captcha',
                         'blocked', 'restricted', 'unavailable', 'private',
-                        'members-only', 'join this channel', 'age-restricted'
+                        'members-only', 'join this channel', 'age-restricted',
+                        'precondition check failed'
                     ]):
                         return {'success': False, 'error': f'Access restricted: {str(e)}'}
                     elif 'video unavailable' in error_msg:
@@ -454,7 +464,7 @@ class VideoProcessor:
                     elif 'no video formats found' in error_msg:
                         return {'success': False, 'error': 'No downloadable video formats available'}
                     elif any(phrase in error_msg for phrase in [
-                        'sign in to confirm', 'not a bot', 'captcha'
+                        'sign in to confirm', 'not a bot', 'captcha', 'precondition check failed'
                     ]):
                         return {'success': False, 'error': 'Bot detection or login required'}
                     elif any(phrase in error_msg for phrase in [
@@ -506,7 +516,7 @@ class VideoProcessor:
             elif 'no video formats found' in error_msg:
                 return {'success': False, 'error': 'No downloadable formats found'}
             elif any(phrase in error_msg for phrase in [
-                'sign in to confirm', 'not a bot', 'captcha'
+                'sign in to confirm', 'not a bot', 'captcha', 'precondition check failed'
             ]):
                 return {'success': False, 'error': 'YouTube bot detection triggered'}
             elif any(phrase in error_msg for phrase in [
